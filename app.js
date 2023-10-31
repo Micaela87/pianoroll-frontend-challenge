@@ -109,22 +109,16 @@ class PianoRollDisplay {
       const rollId = Number(cardDiv.getAttribute('id'));
       const svg = svgContainer.children[0];
 
-      // const controlsContainer = document.createElement('div');
-      // cardDiv.appendChild(controlsContainer);
-
       const pianoRollContainer = document.getElementById('pianoRollContainer');
       pianoRollContainer.innerHTML = '';
-      pianoRollContainer.style.alignItems = 'flex-start';
-      pianoRollContainer.style.maxHeight = 'none';
-      pianoRollContainer.style.overflowY = 'unset';
+      pianoRollContainer.classList.remove('grid-view');
+      pianoRollContainer.classList.add('main-piano-roll-view');
+      
       const colSx = document.createElement('div');
       const colDx = document.createElement('div');
-      colSx.style.width = '65%';
-      colSx.style.margin = '10px';
-      colDx.style.maxHeight = '70vh';
-      colDx.style.overflowY = 'auto';
-      colDx.style.width = 'calc(35% - 20px)';
-      colDx.style.margin = '10px 0';
+      colSx.classList.add('col-sx');
+      colDx.classList.add('col-dx');
+
       cardDiv.style.width = '100%';
       cardDiv.style.margin = '0';
       svgContainer.style.width = '95%';
@@ -173,17 +167,13 @@ class PianoRollDisplay {
   startSelection(e) {
     const self = csvToSVG;
     e.preventDefault();
+    self.svgContainerX = self.svgContainer.getBoundingClientRect().x;
     self.selected.removeEventListener('click', self.selectPianoRoll);
     self.start = e.clientX - self.svgContainerX;
     
     self.selection = document.createElement('div');
-    self.selection.style.position = 'absolute';
-    self.selection.style.top = '0';
+    self.selection.classList.add('selection');
     self.selection.style.left = `${self.start}px`;
-    self.selection.style.backgroundColor = '#944038';
-    self.selection.style.opacity = '0.1';
-    self.selection.style.height = '300px';
-    self.svgContainerX = self.svgContainer.getBoundingClientRect().x;
     self.svgContainer.appendChild(self.selection);
     self.svgContainer.addEventListener('mousemove', self.generateSelection)
   }

@@ -33,13 +33,34 @@ body {
 
 #pianoRollContainer {
   display: flex;
-  align-items: center;
   width: 90%;
   margin: 10px auto;
   flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.grid-view {
+  align-items: center;
   max-height: 100vh;
   overflow-y: auto;
-  justify-content: space-between;
+}
+
+.main-piano-roll-view {
+  align-items: flex-start;
+  /* max-height: none;
+  overflow-y: unset; */
+}
+
+.col-sx {
+  width: 65%;
+  margin: 10px;
+}
+
+.col-dx {
+  max-height: 365.60px;
+  overflow-y: auto;
+  width: calc(35% - 20px);
+  margin: 10px 0;
 }
 
 h1 {
@@ -87,4 +108,28 @@ button:hover {
 
 .description {
   margin: 10px;
+}
+
+.selection {
+  position: absolute;
+  top: 0;
+  background-color: #94403854;
+  height: 300px;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+
+/* mobile */
+@media screen and (max-width: 700px) {
+  .main-piano-roll-view {
+    flex-direction: column;
+  }
+
+  .col-sx {
+    width: calc(100% - 20px);
+  }
+
+  .col-dx {
+    width: 100%;
+  }
 }
