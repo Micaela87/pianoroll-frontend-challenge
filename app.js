@@ -71,6 +71,8 @@ class PianoRollDisplay {
     if (!this.data) return;
     
     const pianoRollContainer = document.getElementById('pianoRollContainer');
+    pianoRollContainer.classList.remove('main-piano-roll-view');
+    pianoRollContainer.classList.add('grid-view');
     pianoRollContainer.innerHTML = '';
     for (let it = 0; it < 20; it++) {
       const start = it * 60;
