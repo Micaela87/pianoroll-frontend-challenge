@@ -106,6 +106,21 @@ button:hover {
   width: 30%;
 }
 
+.piano-roll-card-expanded {
+  width: 100%;
+  margin: 0;
+}
+
+.piano-roll-card-thumb {
+  width: calc(100% - 20px);
+  margin: 10px;
+}
+
+.first-piano-roll-card-thumb {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+}
+
 .description {
   margin: 10px;
 }
@@ -123,6 +138,14 @@ button:hover {
 @media screen and (max-width: 700px) {
   .main-piano-roll-view {
     flex-direction: column;
+  }
+
+  .piano-roll-card {
+    width: 100%;
+  }
+
+  .piano-roll-card-thumb.piano-roll-card {
+    width: calc(100% - 20px);
   }
 
   .col-sx {

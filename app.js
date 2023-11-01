@@ -88,58 +88,46 @@ class PianoRollDisplay {
 
   selectPianoRoll(e) {
     const self = csvToSVG;
-      if (self.selected) {
-        const index = Number(self.selected.getAttribute('id'));
-        self.selected.children[1].style.width = '80%';
-        self.selected.addEventListener('click', self.selectPianoRoll);
 
-        for (let i = 0; i < self.selected.children[1].children.length; i++) {
-          const child = self.selected.children[1].children[i];
-          if (i === 0) {
-            child.setAttribute('height', '150');
-            child.setAttribute('width', '100%');
-          } else {
-            self.selected.children[1].removeChild(child);
-          }
-        }
-        
-        self.divCollection = [...self.divCollection.slice(0, index), self.selected, ...self.divCollection.slice(index)];
+    // Restore previous params for Piano Roll no longer selected
+      if (self.selected) {
+        self.restoreParams();
       }
 
       const cardDiv = self.selected = this;
       const svgContainer = self.svgContainer = cardDiv.children[1];
       const rollId = Number(cardDiv.getAttribute('id'));
       const svg = svgContainer.children[0];
-
       const pianoRollContainer = document.getElementById('pianoRollContainer');
+
+      // Prepare Piano Rolls Container to show expanded Piano Roll Card
       pianoRollContainer.innerHTML = '';
       pianoRollContainer.classList.remove('grid-view');
       pianoRollContainer.classList.add('main-piano-roll-view');
       
+      // Split Piano Roll Container in 2 columns
       const colSx = document.createElement('div');
       const colDx = document.createElement('div');
       colSx.classList.add('col-sx');
       colDx.classList.add('col-dx');
 
-      cardDiv.style.width = '100%';
+      // Add style to Piano Roll Card expanded
+      cardDiv.classList.add('piano-roll-card-expanded');
+      cardDiv.classList.remove('piano-roll-card-thumb');
       cardDiv.style.margin = '0';
+
+      // Make Piano Roll SVG bigger
       svgContainer.style.width = '95%';
       svg.setAttribute('height', '300');
       svg.setAttribute('width', '100%');
+      
+      // Append Piano Roll Card to Sx Col
       colSx.appendChild(cardDiv);
-      self.divCollection.splice(rollId, 1);
-      self.divCollection.forEach((element, index) => {
 
-        if (index === 0) {
-          element.style.margin = '0 10px';
-        } else {
-          element.style.margin = '10px';
-        }
+      // Append not selected Piano Roll Cards to Dx Col
+      self.populateDxCol(rollId, colDx);
 
-        element.style.width = 'calc(100% - 20px)';
-        
-        colDx.appendChild(element);
-      })
+      // Append columns to Piano Rolls Container
       pianoRollContainer.appendChild(colSx);
       pianoRollContainer.appendChild(colDx);
   }
@@ -149,7 +137,7 @@ class PianoRollDisplay {
     const notesCollection = [];
     const selectedNotes = [];
     const svgElements = self.svgContainer.children[0].children;
-    self.selection.style.width = `${e.clientX - self.start - self.svgContainerX}px`;
+    self.selection.style.width = `${((e.clientX - self.start - self.svgContainerX) / self.svgContainer.getBoundingClientRect().width) * 100}%`;
     for (let i = 0; i < svgElements.length; i++) {
       if (svgElements[i].getAttribute('class') === 'note-rectangle') {
         notesCollection.push(svgElements[i]);
@@ -175,9 +163,50 @@ class PianoRollDisplay {
     
     self.selection = document.createElement('div');
     self.selection.classList.add('selection');
-    self.selection.style.left = `${self.start}px`;
+    self.selection.style.left = `${(self.start / self.svgContainer.getBoundingClientRect().width) * 100}%`;
     self.svgContainer.appendChild(self.selection);
     self.svgContainer.addEventListener('mousemove', self.generateSelection)
+  }
+
+  restoreParams() {
+
+    this.selected.classList.remove('piano-roll-card-expanded');
+    this.selected.classList.add('piano-roll-card-thumb');
+    const index = Number(this.selected.getAttribute('id'));
+    this.selected.children[1].style.width = '80%';
+    this.selected.addEventListener('click', this.selectPianoRoll);
+    const collection = Array.from(this.selected.children[1].children)
+    for (let i = 0; i < collection.length; i++) {
+      const child = collection[i];
+      if (i === 0) {
+        child.setAttribute('height', '150');
+        child.setAttribute('width', '100%');
+      } else {
+        this.selected.children[1].removeChild(child);
+      }
+    }
+    
+    this.divCollection = [...this.divCollection.slice(0, index), this.selected, ...this.divCollection.slice(index)];
+  }
+
+  populateDxCol(rollId, colDx) {
+
+    // Remove selected Piano Roll card from cards' collection
+    this.divCollection.splice(rollId, 1);
+
+    // Add style to remaining not selected Piano Roll cards and append them to Dx Col
+    this.divCollection.forEach((element, index) => {
+
+      if (index === 0) {
+        element.style.margin = '0 10px';
+      } else {
+        element.style.margin = '10px';
+      }
+
+      element.classList.add('piano-roll-card-thumb');
+      
+      colDx.appendChild(element);
+    });
   }
 }
 
