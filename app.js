@@ -1,16 +1,16 @@
 import PianoRoll from './pianoroll.js';
 import PianoRollEventsService from './service.js';
 
-let csvToSVG = null;
-
 class PianoRollDisplay {
 
-  service = null;
+  eventsService = null;
 
   constructor(csvURL) {
     this.csvURL = csvURL;
     this.data = null;
     this.eventsService = new PianoRollEventsService();
+    const logo = document.getElementById('logo-container');
+    logo.addEventListener('click', this.eventsService.goToHomePage);
   }
 
   async loadPianoRollData() {
@@ -77,6 +77,5 @@ class PianoRollDisplay {
 
 document.getElementById('loadCSV').addEventListener('click', async () => {
   const csvToSVG = new PianoRollDisplay();
-  csvToSVG.eventsService.divCollection = [];
   await csvToSVG.generateSVGs();
 });

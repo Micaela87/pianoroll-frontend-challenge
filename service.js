@@ -5,9 +5,11 @@ export default class PianoRollEventsService {
     selection = null;
     start = null;
     svgContainerX = null;
+    svgContainer = null;
 
     constructor() {};
 
+    // Use arrow functions to access outer this
     selectPianoRoll = (e) => {
 
         // Restore previous params for Piano Roll no longer selected
@@ -99,6 +101,7 @@ export default class PianoRollEventsService {
   }
 
   restoreParams() {
+
     // Toggle classes
     this.selected.classList.remove('piano-roll-card-expanded');
     this.selected.classList.add('piano-roll-card-thumb');
@@ -121,7 +124,7 @@ export default class PianoRollEventsService {
         child.setAttribute('height', '150');
         child.setAttribute('width', '100%');
       } else {
-        this.selected.children[1].removeChild(child);
+        svgContainer.removeChild(child);
       }
     }
     
@@ -131,16 +134,22 @@ export default class PianoRollEventsService {
   }
 
   generateSelection = (e) => {
+
     const notesCollection = [];
     const selectedNotes = [];
     const svgElements = this.svgContainer.children[0].children;
+
+    // Make selection width dynamic according to mouse x position
     this.selection.style.width = `${((e.clientX - this.start - this.svgContainerX) / this.svgContainer.getBoundingClientRect().width) * 100}%`;
+    
+    // Collect all notes
     for (let i = 0; i < svgElements.length; i++) {
       if (svgElements[i].getAttribute('class') === 'note-rectangle') {
         notesCollection.push(svgElements[i]);
       }
     }
 
+    // Select notes in the range of selection
     const startPerc = this.start / this.svgContainer.getBoundingClientRect().width;
     const endPerc = (e.clientX - this.svgContainerX) / this.svgContainer.getBoundingClientRect().width;
     notesCollection.forEach((note) => {
@@ -168,6 +177,27 @@ export default class PianoRollEventsService {
       element.classList.add('piano-roll-card-thumb');
       
       colDx.appendChild(element);
+    });
+  }
+
+  goToHomePage = (e) => {
+
+    // Restore pianoRollContainer style and innerHTML
+    const pianoRollContainer = document.getElementById('pianoRollContainer');
+    pianoRollContainer.innerHTML = '';
+    pianoRollContainer.classList.remove('main-piano-roll-view');
+    pianoRollContainer.classList.add('grid-view');
+
+    // Restore selected Piano Roll
+    if (this.selected) {
+        this.restoreParams();
+        this.selected = null;
+    }
+
+    // Append Piano Roll Cards to pianoRollContainer
+    this.divCollection.forEach((div) => {
+        div.className = 'piano-roll-card';
+        pianoRollContainer.appendChild(div);
     });
   }
 }

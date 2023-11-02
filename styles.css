@@ -25,7 +25,11 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);  /* optional drop shadow */
 }
 
-.logo-container img {
+#logo-container {
+  cursor: pointer;
+}
+
+#logo-container img {
   height: 40px;
   width: auto;
   fill: white;
@@ -47,8 +51,6 @@ body {
 
 .main-piano-roll-view {
   align-items: flex-start;
-  /* max-height: none;
-  overflow-y: unset; */
 }
 
 .col-sx {
@@ -116,7 +118,7 @@ button:hover {
   margin: 10px;
 }
 
-.first-piano-roll-card-thumb {
+.first-piano-roll-card-thumb, .last-piano-roll-card-thumb {
   width: calc(100% - 20px);
   margin: 0 10px;
 }
