@@ -125,13 +125,34 @@ button:hover {
   margin: 10px;
 }
 
+.svg-container {
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.svg-container-expanded {
+  width: 95%;
+}
+
 .selection {
   position: absolute;
   top: 0;
   background-color: #94403854;
   height: 300px;
   border-left: 1px solid #000;
-  border-right: 1px solid #000;
+  border-right: 2px solid #000;
+  text-align: right;
+}
+
+.remove-selection-btn {
+  padding: 2px 4px;
+  font-size: 6px;
+  border-bottom: 1px solid #381815;
+  transition: unset;
+  border-radius: 3px;
+  top: -5px;
+  right: 3px;
 }
 
 /* mobile */
